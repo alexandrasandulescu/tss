@@ -44,6 +44,14 @@ class Scheduler:
     def add_task(self, task):
         self.dag.insert(task)
 
+class Parser:
+    """
+    @brief : parses input task graph with the following stucture
+    NODE <index> <children list> <node type> <node cost> <parallelization overhead>
+    <node type> : ROOT, COMPUTATION, TRANSFER, END
+
+    @return : DAG
+    """
 
 def main():
     print("[*] Task scheduler simulator started ...")
