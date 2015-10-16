@@ -1,35 +1,6 @@
-from enum import Enum
 from Queue import PriorityQueue
-
-class TaskState(Enum):
-    running = 1
-    ready = 2
-    terminated = 3
-
-class Task:
-    """
-    @brief : non-preemptable task
-    @param task_id : unique task id
-    @param quantums : the number of quantums the task needs to run
-    """
-    def __init__(self, task_id, parent, quantums):
-        self.task_id = task_id
-        self.parent = parent
-        self.quantums = quantums
-        self.state = TaskState.ready
-
-class DAG:
-    """
-    @brief : graph 
-    """
-    def __init__(self):
-        self.parent = None
-        self.task = None
-        self.kids = []
-
-    def insert(self, task):
-        return True
-
+from parser import Parser
+from utils import DAG
 
 class Scheduler:
     """
@@ -44,18 +15,11 @@ class Scheduler:
     def add_task(self, task):
         self.dag.insert(task)
 
-class Parser:
-    """
-    @brief : parses input task graph with the following stucture
-    NODE <index> <children list> <node type> <node cost> <parallelization overhead>
-    <node type> : ROOT, COMPUTATION, TRANSFER, END
-
-    @return : DAG
-    """
-
 def main():
     print("[*] Task scheduler simulator started ...")
     print("[*] Configuring the environment ...")
+    parser = Parser()
+    parser.parse()
     scheduler = Scheduler(4)
 
 if __name__ == "__main__":
