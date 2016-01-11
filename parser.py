@@ -1,5 +1,5 @@
 import sys
-from utils import DAG, TaskType
+from utils import DAG, Task, TaskType
 
 
 class Parser:
@@ -18,12 +18,13 @@ class Parser:
     def parse(self):
         for line in sys.stdin:
             task_info = line.split()
-            if task_info[0] != "NODE":
-                continue
             if task_info[0] == "NODE_COUNT":
                 self.no_nodes = int(task_info[1])
                 continue
-            task_type = TaskType.parse(task_info[3])
+
+            if task_info[0] != "NODE":
+                continue
+            task_type = TaskType.parse_type(task_info[3])
             memory = flops = 0
             if task_type == TaskType.COMPUTATION:
                 flops=int(task_info[4])
@@ -31,8 +32,9 @@ class Parser:
                 memory=int(task_info[4])
 
             t = Task(task_id=int(task_info[1]),
-                     task_type=task_type,
-                     memory=memory, flops=flops)
-
-            self.dag.insert(t)
+                    task_type=task_type,
+                    memory=memory, flops=flops)
+            children = task_info[2].split(',')
+            self.dag.insert(t, children)
+        self.dag.print()
 
