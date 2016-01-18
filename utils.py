@@ -41,15 +41,20 @@ class Task:
     @param task_id : unique task id
     @param quantums : the number of quantums the task needs to run
     """
-    def __init__(self, task_id, task_type, memory=0, flops=0):
+    def __init__(self, task_id, task_type, cost=0, memory=0, flops=0):
         self.task_id = task_id
         self.task_type = task_type
         self.memory = memory
         self.flops = flops
         self.state = TaskState.ready
+        self.cost = cost
+        self.finish = 0
 
     def print(self):
         print(TaskType.get_string(self.task_type) + " id " + str(self.task_id))
+
+    def set_finish(self, finish):
+        self.finish = finish
 
 class DAG:
     """

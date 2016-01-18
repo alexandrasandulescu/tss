@@ -33,6 +33,7 @@ class Parser:
 
             t = Task(task_id=int(task_info[1]),
                     task_type=task_type,
+                    cost=int(task_info[5]),
                     memory=memory, flops=flops)
             children = task_info[2].split(',')
             self.dag.insert(t, children)
