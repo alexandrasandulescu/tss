@@ -38,6 +38,7 @@ class Scheduler:
 
     def benchmarking(self):
         print("[*] Running Earliest Time First algorithm with " + str(self.cores) + " cores")
+        print(self.parser.dag.listify())
         scheduling = etf(self.parser.dag, self.parser.no_nodes)
         makespan = self.compute_makespan(scheduling)
 

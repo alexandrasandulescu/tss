@@ -64,11 +64,16 @@ class Task:
 
         return 0;
 
-    def __str__(self):
+    def __repr__(self):
         return TaskType.get_string(self.task_type) + " id " + str(self.task_id)
 
     def finish(self, finish):
         return self.start + self.time
+    def __str__(self):
+        return self.__repr__()
+
+    def set_finish(self, finish):
+        self.finish = finish
 
 class DAG:
     """
@@ -83,6 +88,15 @@ class DAG:
         self.kids_indices = []
         self.inserted_indices = []
         self.static_level = 0
+
+    def listify(self, visited=set()):
+        res = [self.task]
+        for kid in self.kids:
+            if kid not in visited:
+                res.extend(kid.listify(visited))
+                visited.add(kid)
+
+        return res
 
     def insert(self, task, kids_indices, child):
         # who is the parent of this task

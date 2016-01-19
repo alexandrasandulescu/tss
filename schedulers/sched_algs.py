@@ -25,7 +25,28 @@ def etf(dag, no_nodes):
 
 
 # Highest Level First with Estimated Time
-#def hleft
+def hleft(dag, no_nodes):
+    scheduling = {}
+    # initialize empty task list for each processor
+    for node in range(0, no_nodes):
+        scheduling[node] = []
+
+    L = dag.listify()
+    L.sort(key=lambda task: task.static_level)
+
+    while len(L) > 0:
+        task = L.pop()
+        min_node = 0
+        for node in scheduling:
+            processor_finish(scheduling[node])
+
+    return scheduling
+
+def processor_finish(tasks):
+    if tasks:
+        return tasks[-1].finish()
+
+    return 0
 
 # Modified Critical Path
 #def mcp
