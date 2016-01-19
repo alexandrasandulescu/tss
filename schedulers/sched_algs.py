@@ -17,10 +17,7 @@ def add_schedule_pairs(task, nodes, pq):
 def etf(dag, no_nodes):
     pq = PriorityQueue()
     taskset = []
-    visited = no_nodes * [False]
-    compute_static_level(dag, visited)
-
-    #pq.push(dag)
+    pq.put(dag)
 
     #while not pq.empty():
     #    (node, task) = pq.pop()

@@ -2,6 +2,7 @@ from queue import PriorityQueue
 from parser import Parser
 from utils import DAG
 from schedulers.sched_algs import etf
+from schedulers.utils import compute_static_level
 import sys
 
 class Scheduler:
@@ -48,8 +49,13 @@ def main():
     # skip first 2 lines
     sys.stdin.readline()
     sys.stdin.readline()
+
     scheduler = Scheduler(4)
     scheduler.parser.parse()
+
+    visited = scheduler.parser.no_nodes * [False]
+    compute_static_level(scheduler.parser.dag, visited)
+
     scheduler.benchmarking()
 
 if __name__ == "__main__":
