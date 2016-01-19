@@ -1,4 +1,5 @@
 from schedulers.utils import RunTask, compute_static_level
+from utils import listify
 import heapq
 
 def add_schedule_pairs(task, nodes, pq):
@@ -25,26 +26,33 @@ def etf(dag, no_nodes):
 
 
 # Highest Level First with Estimated Time
-def hleft(dag, no_nodes):
+def hlfet(dag, no_nodes):
     scheduling = {}
     # initialize empty task list for each processor
     for node in range(0, no_nodes):
         scheduling[node] = []
 
-    L = dag.listify()
+    L = listify(dag)
     L.sort(key=lambda task: task.static_level)
 
     while len(L) > 0:
         task = L.pop()
         min_node = 0
+        min_val = processor_finish(scheduling[0])
         for node in scheduling:
-            processor_finish(scheduling[node])
+            t = processor_finish(scheduling[node])
+            m = max(t, task.est)
+            if m < min_val:
+                min_val = m
+                min_node = node
+        scheduling[min_node].append(task)
+        task.start = min_val
 
     return scheduling
 
 def processor_finish(tasks):
-    if tasks:
-        return tasks[-1].finish()
+    if len(tasks) > 0:
+        return (tasks[-1]).finish()
 
     return 0
 

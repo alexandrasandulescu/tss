@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 from parser import Parser
-from utils import DAG
-from schedulers.sched_algs import etf
+from utils import DAG, listify
+from schedulers.sched_algs import etf, hlfet
 from schedulers.utils import compute_static_level, compute_est
 import sys
 
@@ -38,9 +38,10 @@ class Scheduler:
 
     def benchmarking(self):
         print("[*] Running Earliest Time First algorithm with " + str(self.cores) + " cores")
-        print(self.parser.dag.listify())
-        scheduling = etf(self.parser.dag, self.parser.no_nodes)
-        makespan = self.compute_makespan(scheduling)
+        #scheduling = etf(self.parser.dag, self.parser.no_nodes)
+        scheduling = hlfet(self.parser.dag, self.cores)
+        print(scheduling)
+        #makespan = self.compute_makespan(scheduling)
 
 
 def main():

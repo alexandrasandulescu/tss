@@ -47,7 +47,6 @@ class Task:
         self.time = self.get_time(task_type, memory, flops)
         #print(str(self.time)+ TaskType.get_string(self.task_type))
         self.state = TaskState.ready
-        self.finish = 0
         self.static_level = 0
         if self.task_type == TaskType.END:
             self.static_level = self.time
@@ -67,13 +66,27 @@ class Task:
     def __repr__(self):
         return TaskType.get_string(self.task_type) + " id " + str(self.task_id)
 
-    def finish(self, finish):
+    def finish(self):
         return self.start + self.time
     def __str__(self):
         return self.__repr__()
 
     def set_finish(self, finish):
         self.finish = finish
+
+
+def listify(dag, visited=set()):
+    if not visited:
+        visited = set()
+
+    res = [dag.task]
+    visited.add(dag)
+    for kid in dag.kids:
+        if kid not in visited:
+            res.extend(listify(kid, visited))
+            visited.add(kid)
+
+    return res
 
 class DAG:
     """
@@ -89,14 +102,6 @@ class DAG:
         self.inserted_indices = []
         self.static_level = 0
 
-    def listify(self, visited=set()):
-        res = [self.task]
-        for kid in self.kids:
-            if kid not in visited:
-                res.extend(kid.listify(visited))
-                visited.add(kid)
-
-        return res
 
     def insert(self, task, kids_indices, child):
         # who is the parent of this task
