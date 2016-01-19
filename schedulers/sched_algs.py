@@ -1,5 +1,5 @@
-from queue import PriorityQueue
 from schedulers.utils import RunTask, compute_static_level
+import heapq
 
 def add_schedule_pairs(task, nodes, pq):
     taskset[task.taskid] = task
@@ -15,9 +15,8 @@ def add_schedule_pairs(task, nodes, pq):
 
 # Early time first algorithm
 def etf(dag, no_nodes):
-    pq = PriorityQueue()
-    taskset = []
-    pq.put(dag)
+    hq = []
+    heapq.heappush(hq, (0, dag))
 
     #while not pq.empty():
     #    (node, task) = pq.pop()

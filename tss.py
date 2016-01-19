@@ -2,7 +2,7 @@ from queue import PriorityQueue
 from parser import Parser
 from utils import DAG
 from schedulers.sched_algs import etf
-from schedulers.utils import compute_static_level
+from schedulers.utils import compute_static_level, compute_est
 import sys
 
 class Scheduler:
@@ -55,6 +55,8 @@ def main():
 
     visited = scheduler.parser.no_nodes * [False]
     compute_static_level(scheduler.parser.dag, visited)
+    visited = scheduler.parser.no_nodes * [False]
+    compute_est(scheduler.parser.dag, visited)
 
     scheduler.benchmarking()
 

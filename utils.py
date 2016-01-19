@@ -51,6 +51,9 @@ class Task:
         self.static_level = 0
         if self.task_type == TaskType.END:
             self.static_level = self.time
+        # Task start time and earliest start time
+        self.start = 0
+        self.est = 0
 
     def get_time(self, task_type, memory, flops):
         if task_type == TaskType.COMPUTATION:
@@ -64,8 +67,8 @@ class Task:
     def __str__(self):
         return TaskType.get_string(self.task_type) + " id " + str(self.task_id)
 
-    def set_finish(self, finish):
-        self.finish = finish
+    def finish(self, finish):
+        return self.start + self.time
 
 class DAG:
     """
