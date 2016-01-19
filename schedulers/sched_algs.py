@@ -12,17 +12,40 @@ def add_schedule_pairs(task, nodes, pq):
 
 #def update_start(node, task, )
 
-
+def compare_dags(node):
+    return node.task.est
 
 # Early time first algorithm
 def etf(dag, no_nodes):
-    hq = []
-    heapq.heappush(hq, (0, dag))
+    pq = [dag]
+    scheduling = {}
+    for i in range(0, no_nodes):
+        scheduling[i] = []
 
-    #while not pq.empty():
-    #    (node, task) = pq.pop()
-    #    taskset[task.taskid] = None
-    return {}
+    while pq:
+        pq.sort(key=compare_dags)
+        node = None
+        # If ties, compare static level
+        if len(pq) > 1 and (pq[0].task.est == pq[1].task.est):
+            if pq[0].task.static_level > pq[1].task.static_level:
+                node = pq.pop(0)
+            else:
+                node = pq.pop(1)
+        if node == None:
+            node = pq.pop(0)
+        # Select processor
+
+        min_core = -1
+        min_est = sys.maxsize
+        for i in range(0, no_nodes):
+            est = sum([d.task.time for d in scheduling[i]])
+            if est + node.task.est < min_est:
+                min_est = est + node.task.est
+                min_core = i
+        scheduling[min_core] += [node]
+
+        #find the processor
+    return scheduling
 
 
 # Highest Level First with Estimated Time
