@@ -37,11 +37,13 @@ def etf(dag, no_nodes):
         min_core = -1
         min_est = sys.maxsize
         for i in range(0, no_nodes):
-            est = sum([d.task.time for d in scheduling[i]])
+            est = processor_finish(scheduling[i])
             if est + node.task.est < min_est:
                 min_est = est + node.task.est
                 min_core = i
+        node.task.time = min_est
         scheduling[min_core] += [node.task]
+        pq += [d for d in node.kids]
 
         #find the processor
     return scheduling
