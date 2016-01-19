@@ -36,7 +36,14 @@ class Scheduler:
 
     def benchmarking(self):
         print("[*] Running Earliest Time First algorithm with " + str(self.cores) + " cores")
-        #scheduling = etf(self.parser.dag, self.parser.no_nodes)
+        scheduling = etf(self.parser.dag, self.parser.no_nodes)
+        print(scheduling)
+        makespan = self.compute_makespan(scheduling)
+        flowtime = self.compute_flowtime(scheduling)
+        print(makespan, flowtime)
+
+        print("[HLEFT]")
+
         scheduling = hlfet(self.parser.dag, self.cores)
         print(scheduling)
         makespan = self.compute_makespan(scheduling)

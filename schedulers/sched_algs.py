@@ -1,6 +1,5 @@
-from schedulers.utils import RunTask, compute_static_level
 from utils import listify
-import heapq
+import sys
 
 def add_schedule_pairs(task, nodes, pq):
     taskset[task.taskid] = task
@@ -42,7 +41,7 @@ def etf(dag, no_nodes):
             if est + node.task.est < min_est:
                 min_est = est + node.task.est
                 min_core = i
-        scheduling[min_core] += [node]
+        scheduling[min_core] += [node.task]
 
         #find the processor
     return scheduling
