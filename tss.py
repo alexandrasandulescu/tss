@@ -14,7 +14,7 @@ class Scheduler:
         self.running = {}
         self.parser = Parser()
 
-    def compute_makespan(scheduling):
+    def compute_makespan(self, scheduling):
         # TODO compute with finish time
         makespan = -1
         for node in scheduling:
@@ -37,9 +37,8 @@ class Scheduler:
 
     def benchmarking(self):
         print("[*] Running Earliest Time First algorithm with " + str(self.cores) + " cores")
-        etf(self.parser.dag, self.parser.no_nodes)
-        scheduling = etf(self.dag)
-        makespan = compute_makespan(scheduling)
+        scheduling = etf(self.parser.dag, self.parser.no_nodes)
+        makespan = self.compute_makespan(scheduling)
 
 
 def main():

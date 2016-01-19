@@ -25,6 +25,7 @@ def etf(dag, no_nodes):
     #while not pq.empty():
     #    (node, task) = pq.pop()
     #    taskset[task.taskid] = None
+    return {}
 
 
 # Highest Level First with Estimated Time
