@@ -25,3 +25,17 @@ class SchedulePair:
             self.start = self.node.finish
             return True
         return False
+
+def compute_static_level(dag, visited):
+
+    if visited[dag.task.task_id]:
+        return
+    if len(dag.kids) == 0:
+        return
+
+    for kid in dag.kids:
+        compute_static_level(kid, visited)
+
+    dag.task.static_level = dag.task.time + \
+            max([dag_kid.task.static_level for dag_kid in dag.kids])
+    visited[dag.task.task_id] = True

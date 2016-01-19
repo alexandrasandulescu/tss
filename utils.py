@@ -48,6 +48,9 @@ class Task:
         #print(str(self.time)+ TaskType.get_string(self.task_type))
         self.state = TaskState.ready
         self.finish = 0
+        self.static_level = 0
+        if self.task_type == TaskType.END:
+            self.static_level = self.time
 
     def get_time(self, task_type, memory, flops):
         if task_type == TaskType.COMPUTATION:
@@ -71,27 +74,35 @@ class DAG:
     @param kids_indices :  unique ids of kids
     """
     def __init__(self):
-        self.parent = None
+        self.parent = []
         self.task = None
         self.kids = []
         self.kids_indices = []
+        self.inserted_indices = []
+        self.static_level = 0
 
-    def insert(self, task, kids_indices):
+    def insert(self, task, kids_indices, child):
         # who is the parent of this task
         if not (task.task_id in self.kids_indices):
             for kid in self.kids:
-                inserted = kid.insert(task, kids_indices)
-                if inserted:
-                    return True
+                child = kid.insert(task, kids_indices, child)
+            return child
 
-        # if no place found, insert it in the root
-        child = DAG()
-        child.parent = self
-        child.task = task
-        child.kids = []
-        child.kids_indices = kids_indices
+        if child == None:
+            child = DAG()
+            child.task = task
+            child.kids = []
+            child.kids_indices = kids_indices
+
+        #verify if child is already here
+        if task.task_id in self.inserted_indices:
+            return child
+        #print("parent " + str(self.task.task_id) + " added child " + str(task.task_id))
+
+        child.parent += [self]
         self.kids += [child]
-        return True
+        self.inserted_indices += [child.task.task_id]
+        return child
 
     def print(self):
         for kid in self.kids:

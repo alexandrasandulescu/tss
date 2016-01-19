@@ -1,5 +1,5 @@
 from queue import PriorityQueue
-from schedulers.utils import RunTask
+from schedulers.utils import RunTask, compute_static_level
 
 def add_schedule_pairs(task, nodes, pq):
     taskset[task.taskid] = task
@@ -14,18 +14,17 @@ def add_schedule_pairs(task, nodes, pq):
 
 
 # Early time first algorithm
-def etf(dag):
-    #TODO compute static level
+def etf(dag, no_nodes):
     pq = PriorityQueue()
     taskset = []
+    visited = no_nodes * [False]
+    compute_static_level(dag, visited)
 
-    #add_schedule_pairs(entry, nodes, pq)
+    #pq.push(dag)
 
-    while not pq.empty():
-        (node, task) = pq.pop()
-        taskset[task.taskid] = None
-
-
+    #while not pq.empty():
+    #    (node, task) = pq.pop()
+    #    taskset[task.taskid] = None
 
 
 # Highest Level First with Estimated Time

@@ -13,7 +13,7 @@ class Parser:
 
     def __init__(self):
         self.no_nodes = 0
-        self.dag = DAG()
+        self.dag = None
 
     def parse(self):
         for line in sys.stdin:
@@ -36,4 +36,13 @@ class Parser:
                     task_type=task_type,
                     memory=memory, flops=flops)
             children = task_info[2].split(',')
-            self.dag.insert(t, children)
+            if task_type == TaskType.END:
+                children = []
+
+            children = [int(child) for child in children]
+            if task_type == TaskType.ROOT:
+                self.dag = DAG()
+                self.dag.task = t
+                self.dag.kids_indices = children
+            else:
+                self.dag.insert(t, children, None)
