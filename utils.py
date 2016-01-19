@@ -44,10 +44,19 @@ class Task:
     def __init__(self, task_id, task_type, memory=0, flops=0):
         self.task_id = task_id
         self.task_type = task_type
-        self.memory = memory
-        self.flops = flops
+        self.time = self.get_time(task_type, memory, flops)
+        #print(str(self.time)+ TaskType.get_string(self.task_type))
         self.state = TaskState.ready
         self.finish = 0
+
+    def get_time(self, task_type, memory, flops):
+        if task_type == TaskType.COMPUTATION:
+            return flops / (10000 * 1024 * 1024)
+
+        if task_type == TaskType.TRANSFER:
+            return memory / (3200 * 1024 * 1024);
+
+        return 0;
 
     def print(self):
         print(TaskType.get_string(self.task_type) + " id " + str(self.task_id))
