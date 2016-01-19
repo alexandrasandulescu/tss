@@ -24,15 +24,13 @@ class Scheduler:
             makespan = max(makespan, time)
         return makespan
 
-    def compute_flowtime(scheduling):
+    def compute_flowtime(self, scheduling):
         # TODO compute with finish time
         flowtime = 0
         for node in scheduling:
             tasks = scheduling[node]
-            finish = 0
             for task in tasks:
-                finish += task.time
-                flowtime += finish
+                flowtime += task.finish()
 
         return flowtime
 
@@ -41,7 +39,10 @@ class Scheduler:
         #scheduling = etf(self.parser.dag, self.parser.no_nodes)
         scheduling = hlfet(self.parser.dag, self.cores)
         print(scheduling)
-        #makespan = self.compute_makespan(scheduling)
+        makespan = self.compute_makespan(scheduling)
+        flowtime = self.compute_flowtime(scheduling)
+        print(makespan, flowtime)
+
 
 
 def main():
