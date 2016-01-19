@@ -61,8 +61,8 @@ class Task:
 
         return 0;
 
-    def print(self):
-        print(TaskType.get_string(self.task_type) + " id " + str(self.task_id))
+    def __str__(self):
+        return TaskType.get_string(self.task_type) + " id " + str(self.task_id)
 
     def set_finish(self, finish):
         self.finish = finish
