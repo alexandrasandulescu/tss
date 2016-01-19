@@ -1,5 +1,5 @@
 from queue import PriorityQueue
-from utils import RunTask
+from schedulers.utils import RunTask
 
 def add_schedule_pairs(task, nodes, pq):
     taskset[task.taskid] = task
@@ -9,7 +9,7 @@ def add_schedule_pairs(task, nodes, pq):
         pq.push((nodes[i], task))
         entry.add_pair(i, nodes[i], task)
 
-def update_start(node, task, )
+#def update_start(node, task, )
 
 
 
@@ -19,7 +19,7 @@ def etf(dag):
     pq = PriorityQueue()
     taskset = []
 
-    add_schedule_pairs(entry, nodes, pq)
+    #add_schedule_pairs(entry, nodes, pq)
 
     while not pq.empty():
         (node, task) = pq.pop()

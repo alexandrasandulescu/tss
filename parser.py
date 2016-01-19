@@ -25,6 +25,7 @@ class Parser:
             if task_info[0] != "NODE":
                 continue
             task_type = TaskType.parse_type(task_info[3])
+
             memory = flops = 0
             if task_type == TaskType.COMPUTATION:
                 flops=int(task_info[4])
@@ -33,9 +34,6 @@ class Parser:
 
             t = Task(task_id=int(task_info[1]),
                     task_type=task_type,
-                    cost=int(task_info[5]),
                     memory=memory, flops=flops)
             children = task_info[2].split(',')
             self.dag.insert(t, children)
-        self.dag.print()
-

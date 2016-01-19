@@ -39,15 +39,14 @@ class Task:
     """
     @brief : non-preemptable task
     @param task_id : unique task id
-    @param quantums : the number of quantums the task needs to run
+    @param memory, flops : the cost of the node depending on its type
     """
-    def __init__(self, task_id, task_type, cost=0, memory=0, flops=0):
+    def __init__(self, task_id, task_type, memory=0, flops=0):
         self.task_id = task_id
         self.task_type = task_type
         self.memory = memory
         self.flops = flops
         self.state = TaskState.ready
-        self.cost = cost
         self.finish = 0
 
     def print(self):
@@ -59,40 +58,31 @@ class Task:
 class DAG:
     """
     @brief : graph
+    @param kids : dag kids
+    @param kids_indices :  unique ids of kids
     """
     def __init__(self):
         self.parent = None
         self.task = None
         self.kids = []
-        self.children_indices = []
+        self.kids_indices = []
 
-    def insert(self, task, children_indices):
+    def insert(self, task, kids_indices):
         # who is the parent of this task
+        if not (task.task_id in self.kids_indices):
+            for kid in self.kids:
+                inserted = kid.insert(task, kids_indices)
+                if inserted:
+                    return True
+
+        # if no place found, insert it in the root
         child = DAG()
         child.parent = self
         child.task = task
         child.kids = []
-        child.children_indices = children_indices
+        child.kids_indices = kids_indices
         self.kids += [child]
-        for kid in self.kids:
-            inserted = kid.insert_rec(child)
-            if inserted:
-                return True
-        # if no place found, insert it in the root
-        self.kids += [child]
-        self.children_indices += [task.task_id]
-
-    def insert_rec(self, child_dag):
-        if not len(self.children_indices):
-            return False
-        if child_dag.task.task_id in self.children_indices:
-            self.kids += [child_dag]
-            return True
-        for kid in self.kids:
-            inserted = kid.insert_rec(child_dag)
-            if inserted:
-                return True
-        return False
+        return True
 
     def print(self):
         for kid in self.kids:
