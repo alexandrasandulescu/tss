@@ -11,4 +11,4 @@ if [ "$1" == "check" ]; then
   exit 0
 fi
 
-echo $(./daggen/daggen 2> /dev/null) | python3 tss.py
+./daggen/daggen -n 20 2> /dev/null | python3 tss.py

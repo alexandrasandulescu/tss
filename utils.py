@@ -45,7 +45,7 @@ class Task:
         self.task_id = task_id
         self.task_type = task_type
         self.time = self.get_time(task_type, memory, flops)
-        #print(str(self.time)+ TaskType.get_string(self.task_type))
+        #print(str(self.time)+ " " + str(self.task_id) + " " +  TaskType.get_string(self.task_type))
         self.state = TaskState.ready
         self.static_level = 0
         if self.task_type == TaskType.END:
