@@ -4,6 +4,7 @@ from utils import DAG, listify
 from schedulers.sched_algs import etf, hlfet
 from schedulers.utils import compute_static_level, compute_est
 import sys
+import copy
 
 class Scheduler:
     """
@@ -20,7 +21,7 @@ class Scheduler:
         makespan = -1
         for node in scheduling:
             tasks = scheduling[node]
-            time = sum([task.time for task in tasks])
+            time = max([task.finish() for task in tasks])
             makespan = max(makespan, time)
         return makespan
 
@@ -36,20 +37,20 @@ class Scheduler:
 
     def benchmarking(self):
         print("[*] Running Earliest Time First algorithm with " + str(self.cores) + " cores")
-        scheduling = etf(self.parser.dag, self.parser.no_nodes)
-        print(scheduling)
-        makespan = self.compute_makespan(scheduling)
-        flowtime = self.compute_flowtime(scheduling)
-        print(makespan, flowtime)
-
-        print("[HLEFT]")
-
+        print("[HLFET]")
         scheduling = hlfet(self.parser.dag, self.cores)
         print(scheduling)
         makespan = self.compute_makespan(scheduling)
         flowtime = self.compute_flowtime(scheduling)
         print(makespan, flowtime)
 
+
+        self.parser.dag.clear_time()
+        scheduling = etf(self.parser.dag, self.cores)
+        print(scheduling)
+        makespan = self.compute_makespan(scheduling)
+        flowtime = self.compute_flowtime(scheduling)
+        print(makespan, flowtime)
 
 
 def main():

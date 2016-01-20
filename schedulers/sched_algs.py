@@ -18,6 +18,7 @@ def compare_dags(node):
 def etf(dag, no_nodes):
     pq = [dag]
     scheduling = {}
+    visited = set()
     for i in range(0, no_nodes):
         scheduling[i] = []
 
@@ -32,6 +33,8 @@ def etf(dag, no_nodes):
                 node = pq.pop(1)
         if node == None:
             node = pq.pop(0)
+        if node.task.task_id in visited:
+            continue
         # Select processor
 
         min_core = -1
@@ -43,9 +46,9 @@ def etf(dag, no_nodes):
                 min_core = i
         node.task.time = min_est
         scheduling[min_core] += [node.task]
-        pq += [d for d in node.kids]
+        visited.add(node.task.task_id)
+        pq += [d for d in node.kids if d.task.task_id not in visited]
 
-        #find the processor
     return scheduling
 
 

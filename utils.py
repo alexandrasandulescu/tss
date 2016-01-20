@@ -54,6 +54,7 @@ class Task:
         self.start = 0
         self.est = 0
 
+
     def get_time(self, task_type, memory, flops):
         if task_type == TaskType.COMPUTATION:
             return flops / (10000 * 1024 * 1024)
@@ -102,6 +103,13 @@ class DAG:
         self.inserted_indices = []
         self.static_level = 0
 
+    def __repr__(self):
+        return str(self.task)
+
+    def clear_time(self):
+        self.task.time = 0
+        for kid in self.kids:
+            kid.clear_time()
 
     def insert(self, task, kids_indices, child):
         # who is the parent of this task
